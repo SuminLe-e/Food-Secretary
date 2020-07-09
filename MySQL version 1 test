@@ -1,0 +1,51 @@
+-- MySQL Version 1 test
+
+-- Making food data table
+CREATE TABLE food_list(
+    name VARCHAR(40),
+    quantity INT,
+    unit VARCHAR(20),
+    storage_type VARCHAR(20),
+    category VARCHAR(20),
+    expiry_date DATE,   -- if we have more than two entries w same name & expiry date & storage type, need to alter quantity not add item
+    PRIMARY KEY (name, storage_type, expiry_date)     -- make name and exp_date primary keys
+);
+
+-- fake data list
+INSERT INTO food_list VALUES ('Apple', 2, 'qty', 'Fridge','Fruit', '2020-06-20');
+INSERT INTO food_list VALUES ('Strawberry', 100, 'grams', 'Fridge','Fruit', '2020-06-22');
+INSERT INTO food_list VALUES ('Blueberry', 200, 'grams', 'Fridge','Fruit', '2020-06-19');
+INSERT INTO food_list VALUES ('Chicken thigh', 200, 'grams', 'Fridge','Meat', '2020-06-23');
+INSERT INTO food_list VALUES ('Pork belly', 300, 'grams', 'Fridge','Meat', '2020-06-25');
+INSERT INTO food_list VALUES ('Pork belly', 200, 'grams', 'Freezer','Meat', '2020-07-01');      -- same name, different location and exp
+INSERT INTO food_list VALUES ('Chicken thigh', 200, 'grams', 'Freezer','Meat', '2020-06-23');   -- same name, exp, different location
+INSERT INTO food_list VALUES ('Salmon', 200, 'grams', 'Fridge','Fish', '2020-06-30');
+INSERT INTO food_list VALUES ('Lettuce', 200, 'grams', 'Fridge','Vegetable', '2020-06-20');
+
+-- Sorting
+SELECT *
+FROM food_list
+ORDER BY expiry_date;
+
+-- Filtering
+SELECT *
+FROM food_list
+WHERE expiry_date <= '2020-06-23'
+ORDER BY expiry_date;
+
+-- Adding
+INSERT INTO food_list VALUES ();
+
+-- Deleting
+DELETE FROM food_list
+WHERE name = 'Chicken thigh' AND storage_type = 'Fridge';
+
+-- Displaying whole table
+SELECT * FROM food_list;
+
+-- Deleting table
+-- DROP TABLE food_list;
+
+-- Making temporary column for D-day (derived variable)
+SELECT *, DATEDIFF(expiry_date, CURDATE()) AS days_till
+FROM food_list;
